@@ -32,7 +32,30 @@ namespace Stripe
 			Requestor.Delete(url);
 		}
 
-		public virtual IEnumerable<StripePlan> List(int count = 10, int offset = 0)
+        #region List(int count = 10, int offset = 0)
+        public virtual IEnumerable<StripePlan> List()
+        {
+            int count = 10;
+            int offset = 0;
+
+            return List(count, offset);
+        }
+
+        public virtual IEnumerable<StripePlan> ListWithOffset(int offset)
+        {
+            int count = 10;
+
+            return List(count, offset);
+        }
+
+        public virtual IEnumerable<StripePlan> ListWithCount(int count)
+		{
+            int offset = 0;
+
+			return List(count, offset);
+		}
+
+		public virtual IEnumerable<StripePlan> List(int count, int offset)
 		{
 			var url = Urls.Plans;
 			url = ParameterBuilder.ApplyParameterToUrl(url, "count", count.ToString());
@@ -42,5 +65,6 @@ namespace Stripe
 
 			return Mapper<StripePlan>.MapCollectionFromJson(response);
 		}
+        #endregion
 	}
 }

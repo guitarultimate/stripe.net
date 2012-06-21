@@ -18,7 +18,61 @@ namespace Stripe
 			return Mapper<StripeEvent>.MapFromJson(response);
 		}
 
-		public virtual IEnumerable<StripeEvent> List(int count = 10, int offset = 0, StripeEventSearchOptions searchOptions = null)
+        #region List(int count = 10, int offset = 0, StripeEventSearchOptions searchOptions = null)
+        public virtual IEnumerable<StripeEvent> List()
+		{
+			int count = 10;
+            int offset = 0;
+            StripeEventSearchOptions searchOptions = null;
+
+			return List(count, offset, searchOptions);
+		}
+
+        public virtual IEnumerable<StripeEvent> ListWithCount(int count)
+		{
+			int offset = 0;
+            StripeEventSearchOptions searchOptions = null;
+
+			return List(count, offset, searchOptions);
+		}
+
+        public virtual IEnumerable<StripeEvent> ListWithOffset(int offset)
+		{
+			int count = 10;
+            StripeEventSearchOptions searchOptions = null;
+
+			return List(count, offset, searchOptions);
+		}
+
+        public virtual IEnumerable<StripeEvent> ListWithOptions(StripeEventSearchOptions searchOptions)
+		{
+			int count = 10;
+            int offset = 0;
+
+			return List(count, offset, searchOptions);
+		}
+
+        public virtual IEnumerable<StripeEvent> ListWithOffsetAndOptions(int offset, StripeEventSearchOptions searchOptions)
+		{
+			int count = 10;
+
+			return List(count, offset, searchOptions);
+		}
+
+        public virtual IEnumerable<StripeEvent> ListWithCountAndOptions(int count, StripeEventSearchOptions searchOptions)
+		{
+			int offset = 0;
+
+			return List(count, offset, searchOptions);
+		}
+
+        public virtual IEnumerable<StripeEvent> ListWithCountAndOffset(int count, int offset)
+		{
+			StripeEventSearchOptions searchOptions = null;
+
+			return List(count, offset, searchOptions);
+		}
+		public virtual IEnumerable<StripeEvent> List(int count, int offset, StripeEventSearchOptions searchOptions)
 		{
 			var url = Urls.Events;
 			url = ParameterBuilder.ApplyParameterToUrl(url, "count", count.ToString());
@@ -29,5 +83,6 @@ namespace Stripe
 
 			return Mapper<StripeEvent>.MapCollectionFromJson(response);
 		}
+        #endregion
 	}
 }

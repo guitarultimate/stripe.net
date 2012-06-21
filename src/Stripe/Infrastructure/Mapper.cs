@@ -8,8 +8,16 @@ using Stripe.Infrastructure;
 namespace Stripe
 {
 	public static class Mapper<T>
-	{
-		public static List<T> MapCollectionFromJson(string json, string token = "data")
+	{   
+        #region MapCollectionFromJson
+        public static List<T> MapCollectionFromJson(string json)
+		{
+			string token = "data";
+
+			return MapCollectionFromJson(json, token);
+		}
+
+		public static List<T> MapCollectionFromJson(string json, string token)
 		{
 			var list = new List<T>();
 
@@ -21,12 +29,22 @@ namespace Stripe
 
 			return list;
 		}
+        #endregion
 
-		public static T MapFromJson(string json, string parentToken = null)
+
+        #region MapFromJson
+        public static T MapFromJson(string json)
+		{
+			string parentToken = null;
+
+			return MapFromJson(json, parentToken);
+		}
+		public static T MapFromJson(string json, string parentToken)
 		{
 			var jsonToParse = string.IsNullOrEmpty(parentToken) ? json : JObject.Parse(json).SelectToken(parentToken).ToString();
 
 			return JsonConvert.DeserializeObject<T>(jsonToParse);
 		}
+        #endregion
 	}
 }

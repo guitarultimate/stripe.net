@@ -28,7 +28,62 @@ namespace Stripe
 			return Mapper<StripeInvoice>.MapFromJson(response);
 		}
 
-		public virtual IEnumerable<StripeInvoice> List(int count = 10, int offset = 0, string customerId = null)
+        #region List(int count = 10, int offset = 0, string customerId = null)
+        public virtual IEnumerable<StripeInvoice> List()
+		{
+			int count = 10;
+            int offset = 0;
+            string customerId = null;
+
+			return List(count, offset, customerId);
+		}
+
+        public virtual IEnumerable<StripeInvoice> ListWithCount(int count)
+		{
+			int offset = 0;
+            string customerId = null;
+
+			return List(count, offset, customerId);
+		}
+
+        public virtual IEnumerable<StripeInvoice> ListWithOffset(int offset)
+		{
+			int count = 10;
+            string customerId = null;
+
+			return List(count, offset, customerId);
+		}
+
+        public virtual IEnumerable<StripeInvoice> ListWithCustomerId(string customerId)
+		{
+			int count = 10;
+            int offset = 0;
+
+			return List(count, offset, customerId);
+		}
+
+        public virtual IEnumerable<StripeInvoice> ListWithOffsetAndCustomerId(int offset, string customerId)
+		{
+			int count = 10;
+
+			return List(count, offset, customerId);
+		}
+
+        public virtual IEnumerable<StripeInvoice> ListWithCountAndCustomerId(int count, string customerId)
+		{
+			int offset = 0;
+
+			return List(count, offset, customerId);
+		}
+
+        public virtual IEnumerable<StripeInvoice> ListWithCountAndOffset(int count, int offset)
+		{
+			string customerId = null;
+
+			return List(count, offset, customerId);
+		}
+
+		public virtual IEnumerable<StripeInvoice> List(int count, int offset, string customerId)
 		{
 			var url = Urls.Invoices;
 			url = ParameterBuilder.ApplyParameterToUrl(url, "count", count.ToString());
@@ -41,5 +96,6 @@ namespace Stripe
 
 			return Mapper<StripeInvoice>.MapCollectionFromJson(response);
 		}
+        #endregion
 	}
 }

@@ -14,9 +14,15 @@ namespace Stripe
 			return Mapper<StripeEvent>.MapFromJson(json);
 		}
 
-		public static T ParseEventDataItem<T>(dynamic dataItem)
+		public static T ParseEventDataItem<T>(object dataItem)
 		{
-			return JsonConvert.DeserializeObject<T>((dataItem as JObject).ToString());
+
+            return Mapper<T>.MapFromJson(dataItem.ToString());
 		}
+
+        public static T ParseEventDataItemType<T>(object dataItem)
+        {
+            return Mapper<T>.MapFromJson(dataItem.ToString());
+        }
 	}
 }
