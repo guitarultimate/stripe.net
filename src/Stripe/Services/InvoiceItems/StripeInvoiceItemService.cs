@@ -8,11 +8,19 @@ namespace Stripe
 {
 	public class StripeInvoiceItemService
 	{
+        public string ApiKeyAppSettingName;
+
+        public StripeInvoiceItemService() { }
+        public StripeInvoiceItemService(string ApiKeyAppSettingName)
+        {
+            this.ApiKeyAppSettingName = ApiKeyAppSettingName;
+        }
+
 		public virtual StripeInvoiceItem Create(StripeInvoiceItemCreateOptions createOptions)
 		{
 			var url = ParameterBuilder.ApplyAllParameters(createOptions, Urls.InvoiceItems);
 
-			var response = Requestor.PostString(url);
+			var response = Requestor.PostString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeInvoiceItem>.MapFromJson(response);
 		}
@@ -21,7 +29,7 @@ namespace Stripe
 		{
 			var url = string.Format("{0}/{1}", Urls.InvoiceItems, invoiceItemId);
 
-			var response = Requestor.GetString(url);
+			var response = Requestor.GetString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeInvoiceItem>.MapFromJson(response);
 		}
@@ -31,7 +39,7 @@ namespace Stripe
 			var url = string.Format("{0}/{1}", Urls.InvoiceItems, invoiceItemId);
 			url = ParameterBuilder.ApplyAllParameters(updateOptions, url);
 
-			var response = Requestor.PostString(url);
+			var response = Requestor.PostString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeInvoiceItem>.MapFromJson(response);
 		}
@@ -40,7 +48,7 @@ namespace Stripe
 		{
 			var url = string.Format("{0}/{1}", Urls.InvoiceItems, invoiceItemId);
 
-			Requestor.Delete(url);
+			Requestor.Delete(url,ApiKeyAppSettingName);
 		}
 
 
@@ -108,7 +116,7 @@ namespace Stripe
 			if(!string.IsNullOrEmpty(customerId))
 				url = ParameterBuilder.ApplyParameterToUrl(url, "customer", customerId);
 
-			var response = Requestor.GetString(url);
+			var response = Requestor.GetString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeInvoiceItem>.MapCollectionFromJson(response);
 		}

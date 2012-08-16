@@ -9,11 +9,19 @@ namespace Stripe
 {
 	public class StripeEventService
 	{
+        public string ApiKeyAppSettingName;
+
+        public StripeEventService() { }
+        public StripeEventService(string ApiKeyAppSettingName)
+        {
+            this.ApiKeyAppSettingName = ApiKeyAppSettingName;
+        }
+
 		public virtual StripeEvent Get(string eventId)
 		{
 			var url = string.Format("{0}/{1}", Urls.Events, eventId);
 
-			var response = Requestor.GetString(url);
+			var response = Requestor.GetString(url, ApiKeyAppSettingName);
 
 			return Mapper<StripeEvent>.MapFromJson(response);
 		}
@@ -79,10 +87,11 @@ namespace Stripe
 			url = ParameterBuilder.ApplyParameterToUrl(url, "offset", offset.ToString());
 			url = ParameterBuilder.ApplyAllParameters(searchOptions, url);
 
-			var response = Requestor.GetString(url);
+			var response = Requestor.GetString(url, ApiKeyAppSettingName);
 
 			return Mapper<StripeEvent>.MapCollectionFromJson(response);
 		}
         #endregion
+
 	}
 }
