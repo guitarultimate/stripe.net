@@ -8,37 +8,48 @@ namespace Stripe
 {
 	internal static class Requestor
 	{
-		public static string GetString(string url)
-		{
-			var wr = GetWebRequest(url, "GET");
 
-			return ExecuteWebRequest(wr);
-		}
+        public static string GetString(string url, string ApiKeyAppSettingName)
+        {
+            var wr = GetWebRequest(url, "GET", ApiKeyAppSettingName);
 
-		public static string PostString(string url)
-		{
-			var wr = GetWebRequest(url, "POST");
+            return ExecuteWebRequest(wr);
+        }
 
-			return ExecuteWebRequest(wr);
-		}
+ 
+        public static string PostString(string url, string ApiKeyAppSettingName)
+        {
+            var wr = GetWebRequest(url, "POST", ApiKeyAppSettingName);
 
-		public static string Delete(string url)
-		{
-			var wr = GetWebRequest(url, "DELETE");
+            return ExecuteWebRequest(wr);
+        }
 
-			return ExecuteWebRequest(wr);
-		}
 
-		private static WebRequest GetWebRequest(string url, string method)
-		{
-			var request = (HttpWebRequest) WebRequest.Create(url);
-			request.Method = method;
-			request.Headers.Add("Authorization", GetAuthorizationHeaderValue(ConfigurationManager.AppSettings["StripeApiKey"]));
-			request.ContentType = "application/x-www-form-urlencoded";
-			request.UserAgent = "Stripe.net (https://github.com/jaymedavis/stripe.net)";
+        public static string Delete(string url, string ApiKeyAppSettingName)
+        {
+            var wr = GetWebRequest(url, "DELETE", ApiKeyAppSettingName);
 
-			return request;
-		}
+            return ExecuteWebRequest(wr);
+        }
+
+
+
+        private static WebRequest GetWebRequest(string url, string method, string ApiKeyAppSettingName)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = method;
+
+            if (ApiKeyAppSettingName == null)
+                request.Headers.Add("Authorization", GetAuthorizationHeaderValue(ConfigurationManager.AppSettings["StripeApiKey"]));
+            else
+                request.Headers.Add("Authorization", GetAuthorizationHeaderValue(ConfigurationManager.AppSettings[ApiKeyAppSettingName]));
+           
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.UserAgent = "Stripe.net (https://github.com/jaymedavis/stripe.net)";
+
+            return request;
+        }
+
 
 		private static string GetAuthorizationHeaderValue(string apiKey)
 		{

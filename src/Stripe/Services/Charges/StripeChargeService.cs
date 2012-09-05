@@ -7,11 +7,19 @@ namespace Stripe
 {
 	public class StripeChargeService
 	{
+        public string ApiKeyAppSettingName;
+
+        public StripeChargeService() { }
+        public StripeChargeService(string ApiKeyAppSettingName)
+        {
+            this.ApiKeyAppSettingName = ApiKeyAppSettingName;
+        }
+
 		public virtual StripeCharge Create(StripeChargeCreateOptions createOptions)
 		{
 			var url = ParameterBuilder.ApplyAllParameters(createOptions, Urls.Charges);
 
-			var response = Requestor.PostString(url);
+			var response = Requestor.PostString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeCharge>.MapFromJson(response);
 		}
@@ -20,7 +28,7 @@ namespace Stripe
 		{
 			var url = string.Format("{0}/{1}", Urls.Charges, chargeId);
 
-			var response = Requestor.GetString(url);
+			var response = Requestor.GetString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeCharge>.MapFromJson(response);
 		}
@@ -40,7 +48,7 @@ namespace Stripe
 			if (refundAmountInCents.HasValue)
 				url = ParameterBuilder.ApplyParameterToUrl(url, "amount", refundAmountInCents.Value.ToString());
 
-			var response = Requestor.PostString(url);
+			var response = Requestor.PostString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeCharge>.MapFromJson(response);
 		}
@@ -110,7 +118,7 @@ namespace Stripe
 			if (!string.IsNullOrEmpty(customerId))
 				url = ParameterBuilder.ApplyParameterToUrl(url, "customer", customerId);
 
-			var response = Requestor.GetString(url);
+			var response = Requestor.GetString(url,ApiKeyAppSettingName);
 
 			return Mapper<StripeCharge>.MapCollectionFromJson(response);
 		}
